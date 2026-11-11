@@ -10,4 +10,9 @@ function finish(){ended=true;locked=true;document.querySelectorAll('.monster').f
 function choose(i){if(locked||ended)return;let button=document.querySelector(`[data-id="${i}"]`);if(i===sequence[round]){locked=true;score++;button.classList.add('correct');msg.textContent='✅ Bravo ! +1 point';msg.className='message ok';scoreEl.textContent=`⭐ ${score} point${score!==1?'s':''}`;timer=setTimeout(()=>{if(round===9){finish()}else{round++;display()}},900)}else{lives--;button.classList.add('wrong');msg.textContent=lives>0?'❌ Essaie encore : tu perds un cœur.':'❌ Tu as perdu ton dernier cœur.';msg.className='message bad';hearts.innerHTML=Array.from({length:3},(_,j)=>`<span class="heart ${j>=lives?'lost':''}">${j<lives?'❤️':'🖤'}</span>`).join('');if(lives===0){timer=setTimeout(finish,850)}else{setTimeout(()=>button.classList.remove('wrong'),650)}}}
 function start(){clearTimeout(timer);sequence=shuffle([...Array(DATA.length).keys()]).slice(0,10);round=0;score=0;lives=3;locked=false;ended=false;display()}
 DATA.forEach((m,i)=>{const button=document.createElement('button');button.className='monster';button.type='button';button.dataset.id=i;button.title=m.name;button.setAttribute('aria-label',m.name);const img=document.createElement('img');img.src=m.src;img.alt=m.name;button.appendChild(img);button.onclick=()=>choose(i);grid.appendChild(button)});document.querySelector('#restart').onclick=start;start();
-</script></body></html>
+
+DATA.forEach(m => {
+  m.description = m.description.replace(/^Je suis (?:violet clair|vert clair|vert pâle|bleu clair|violet|rose|jaune|beige|bleu|vert)\. /, "").replace(/^Je suis rose et j’ai /, "J’ai ");
+});
+display();
+/script></body></html>
